@@ -1,0 +1,26 @@
+{
+  "name": "arbeidskrav-kodemappe",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000A\u0000r\u0000b\u0000e\u0000i\u0000d\u0000s\u0000k\u0000r\u0000a\u0000v\u0000\r\u0000 \u0000",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobi-sorensen/Arbeidskrav.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tobi-sorensen/Arbeidskrav/issues"
+  },
+  "homepage": "https://github.com/tobi-sorensen/Arbeidskrav#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^26.0.0"
+  }
+}

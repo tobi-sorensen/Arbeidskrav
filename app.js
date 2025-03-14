@@ -193,3 +193,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("start-fight")?.removeEventListener("click", startFight);
     document.getElementById("start-fight")?.addEventListener("click", startFight);
 });
+
+export default { saveCharacter, generateRandomEnemy, startFight };
