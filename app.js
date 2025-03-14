@@ -194,4 +194,4 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("start-fight")?.addEventListener("click", startFight);
 });
 
-export default { saveCharacter, generateRandomEnemy, startFight };
+module.export = { saveCharacter, generateRandomEnemy, startFight };
