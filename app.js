@@ -1,4 +1,3 @@
-// Del 1: Lag karakter og lagre karakteren i localStorage
 const nameInput = document.getElementById("character-name");
 const hpInput = document.getElementById("character-hp");
 const attackInput = document.getElementById("attack-damage");
@@ -7,7 +6,7 @@ const createButton = document.getElementById("create-character");
 
 let selectedProfileImage = "";
 
-// Velg profilbilde
+
 profileImages.forEach(image => {
     image.addEventListener("click", () => {
         selectedProfileImage = image.src;
@@ -16,10 +15,10 @@ profileImages.forEach(image => {
     });
 });
 
-// Lagre karakter
+
 function saveCharacter() {
     if (!nameInput.value || !hpInput.value || !attackInput.value || !selectedProfileImage) {
-        alert("Fyll ut alle feltene og velg et profilbilde!");
+        console.error("Fyll ut alle feltene og velg et profilbilde!");
         return;
     }
 
@@ -31,12 +30,12 @@ function saveCharacter() {
     };
 
     localStorage.setItem("character", JSON.stringify(character));
-    alert("Karakter lagret!");
+    console.log("Karakter lagret!");
 }
 
 createButton.addEventListener("click", saveCharacter);
 
-// Last karakter ved oppstart
+
 document.addEventListener("DOMContentLoaded", () => {
     const savedCharacter = JSON.parse(localStorage.getItem("character"));
     if (savedCharacter) {
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Del 2: Generer fiende
+
 const generateEnemyButton = document.getElementById("generate-enemy");
 
 const enemies = [
@@ -81,12 +80,12 @@ function generateRandomEnemy() {
     document.getElementById("enemy-hp").innerText = `HP: ${enemy.hp}`;
     document.getElementById("enemy-attack").innerText = `Angrep: ${enemy.attack}`;
 
-    alert(`Fiende generert: ${enemy.name} med ${enemy.hp} HP og ${enemy.attack} angrep!`);
+    console.log(`Fiende generert: ${enemy.name} med ${enemy.hp} HP og ${enemy.attack} angrep!`);
 }
 
 generateEnemyButton.addEventListener("click", generateRandomEnemy);
 
-// Del 3: Vis helten og fienden i kampområdet
+
 const battleArea = document.getElementById("battle-area");
 const resultDisplay = document.getElementById("battle-result");
 
@@ -95,7 +94,7 @@ function displayBattleCharacters() {
     const savedEnemy = JSON.parse(localStorage.getItem("enemy"));
 
     if (!savedHero || !savedEnemy) {
-        alert("Du må ha både en helt og en fiende for å starte kamp!");
+        console.error("Du må ha både en helt og en fiende for å starte kamp!");
         return;
     }
 
@@ -122,16 +121,14 @@ function displayBattleCharacters() {
     document.getElementById("start-fight").addEventListener("click", startFight);
 }
 
-// Kampfunksjon
-function startFight() {
-    // Sørg for at kampområdet er lastet inn før kampen starter
-    displayBattleCharacters(); 
 
+function startFight() {
+    displayBattleCharacters()
     const savedHero = JSON.parse(localStorage.getItem("character"));
     const savedEnemy = JSON.parse(localStorage.getItem("enemy"));
 
     if (!savedHero || !savedEnemy) {
-        alert("Du må ha både en helt og en fiende for å starte kamp!");
+        console.error("Du må ha både en helt og en fiende for å starte kamp!");
         return;
     }
 
@@ -144,54 +141,35 @@ function startFight() {
     const charHpElement = document.getElementById("char-hp");
     const enemyHpElement = document.getElementById("enemy-fight-hp");
 
-    // Sjekk om HTML-elementene finnes
-    if (!resultDisplay || !charHpElement || !enemyHpElement) {
-        alert("Feil: Kampområdet er ikke lastet inn riktig. Prøv å generere en fiende først.");
-        return;
-    }
-
-    // Nullstill kampresultatet
-    resultDisplay.innerHTML = "⚔️ Kampen starter!";
+    resultDisplay.innerHTML = "Kampen starter!";
 
     function updateUI() {
         charHpElement.innerHTML = `<strong>HP:</strong> ${Math.max(heroHP, 0)}`;
         enemyHpElement.innerHTML = `<strong>HP:</strong> ${Math.max(enemyHP, 0)}`;
     }
 
-    function fightRound() {
-        if (heroHP > 0 && enemyHP > 0) {
-            enemyHP -= heroAttack;
-            resultDisplay.innerHTML += `<br>${savedHero.name} angriper ${savedEnemy.name}! ${savedEnemy.name} har ${Math.max(enemyHP, 0)} HP igjen.`;
-            updateUI();
+    enemyHP -= heroAttack;
+    resultDisplay.innerHTML += `<br>${savedHero.name} angriper ${savedEnemy.name}! ${savedEnemy.name} har ${Math.max(enemyHP, 0)} HP igjen.`;
+    
+    heroHP -= enemyAttack;
+    resultDisplay.innerHTML += `<br>${savedEnemy.name} angriper ${savedHero.name}! ${savedHero.name} har ${Math.max(heroHP, 0)} HP igjen.`;
 
-            if (enemyHP <= 0) {
-                resultDisplay.innerHTML += `<br>🎉 ${savedHero.name} vant kampen!`;
-                return;
-            }
+    updateUI();
 
-            setTimeout(() => {
-                heroHP -= enemyAttack;
-                resultDisplay.innerHTML += `<br>${savedEnemy.name} angriper ${savedHero.name}! ${savedHero.name} har ${Math.max(heroHP, 0)} HP igjen.`;
-                updateUI();
-
-                if (heroHP <= 0) {
-                    resultDisplay.innerHTML += `<br>😢 ${savedEnemy.name} vant kampen!`;
-                    return;
-                }
-
-                setTimeout(fightRound, 1000);
-            }, 1000);
-        }
+    if (heroHP > enemyHP) {
+        resultDisplay.innerHTML += `<br>${savedHero.name} vant kampen!`;
+    } else if (enemyHP > heroHP) {
+        resultDisplay.innerHTML += `<br>${savedEnemy.name} vant kampen!`;
+    } else {
+        resultDisplay.innerHTML += `<br>Det ble uavgjort!`;
     }
-
-    updateUI(); // Oppdater HP-visning før første angrep
-    setTimeout(fightRound, 1000);
 }
 
-// Koble riktig event listener til knappen, men sørg for at det ikke legges til flere ganger
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("start-fight")?.removeEventListener("click", startFight);
     document.getElementById("start-fight")?.addEventListener("click", startFight);
 });
 
-module.export = { saveCharacter, generateRandomEnemy, startFight };
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = { saveCharacter, generateRandomEnemy, displayBattleCharacters}
+}
