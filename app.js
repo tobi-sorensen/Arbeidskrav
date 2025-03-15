@@ -93,11 +93,6 @@ function displayBattleCharacters() {
     const savedHero = JSON.parse(localStorage.getItem("character"));
     const savedEnemy = JSON.parse(localStorage.getItem("enemy"));
 
-    if (!savedHero || !savedEnemy) {
-        console.error("Du må ha både en helt og en fiende for å starte kamp!");
-        return;
-    }
-
     battleArea.innerHTML = `
         <h1>Sloss!</h1>
         <div id="character-display" class="profile-card">
